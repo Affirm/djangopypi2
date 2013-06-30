@@ -19,9 +19,9 @@ from urlparse import urlsplit
 from setuptools.package_index import PackageIndex
 from django.contrib.auth.models import User
 from django.utils.datastructures import MultiValueDict
-from ....pypi_metadata.models import Classifier
-from ...models import Package
-from ...models import Release
+from ....pypi_metadata.models import Classifier, DistributionType
+from ....pypi_packages.models import Package
+from ....pypi_packages.models import Release
 
 @contextmanager
 def tempdir():
@@ -108,11 +108,12 @@ added"""
         package.owners.add(owner)
         package.maintainers.add(owner)
 
+        release = Release()
+
         for classifier in meta.classifiers:
-            package.classifiers.add(
+            release.classifiers.append(
                     Classifier.objects.get_or_create(name=classifier)[0])
 
-        release = Release()
         release.version = meta.version
         release.package = package
         release.metadata_version = meta.metadata_version
@@ -134,7 +135,7 @@ added"""
             dist = 'bdist_dmg'
         else:
             dist = 'bdist_dumb'
-        release.distributions.create(content=file, uploader=owner, filetype=dist)
+        release.distributions.create(content=file, uploader=owner, filetype=DistributionType(dist))
         print "%s-%s added" % (meta.name, meta.version)
 
     def _get_meta(self, path):

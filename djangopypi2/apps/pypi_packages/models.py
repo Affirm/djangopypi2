@@ -154,7 +154,7 @@ class Release(models.Model):
 
 def distribution_upload_path(instance, filename):
     configuration = Configuration.objects.latest()
-    return os.path.join(str(configuration.upload_directory), filename)
+    return os.path.join(str(configuration.upload_directory), os.path.basename(filename))
 
 class Distribution(models.Model):
     release = models.ForeignKey(Release, related_name="distributions",
