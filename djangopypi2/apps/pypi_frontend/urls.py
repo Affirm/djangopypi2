@@ -9,6 +9,7 @@ urlpatterns = patterns('',
 
     url('^simple/$'                , views.SimpleIndex.as_view(), name='djangopypi2-simple-index'),
     url('^simple/' + PACKAGE + '/$', views.simple_details       , name='djangopypi2-simple-package-info'),
+    url('^simple/' + PACKAGE + '/' + VERSION + '/$', views.simple_details_version, name='djangopypi2-simple-package-info-versioned'),
 
     url('^pypi/$'                                          , views.index          , name='djangopypi2-pypi-index'),
     url('^pypi/' + PACKAGE + '/$'                          , views.package_details, name='djangopypi2-pypi-package'),
